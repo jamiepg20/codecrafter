@@ -19,7 +19,6 @@ public class PostmanRequest extends RequestEntity<String> {
     @Override
     public HttpHeaders getHeaders() {
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("X-Api-Key", "29b7a0f513224d5987a9d76877d065c3");
         return httpHeaders;
     }
 }

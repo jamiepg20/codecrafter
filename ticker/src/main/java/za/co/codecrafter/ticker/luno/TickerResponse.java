@@ -3,7 +3,7 @@ package za.co.codecrafter.ticker.luno;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import za.co.codecrafter.ticker.model.Currency;
+import za.co.codecrafter.ticker.model.CurrencyPair;
 import za.co.codecrafter.ticker.model.Ticker;
 
 import java.util.Date;
@@ -37,7 +37,7 @@ public class TickerResponse {
         ticker.setAsk(ask);
         ticker.setBid(bid);
         if (pair.equals("XBTZAR")) {
-            ticker.setCurrency(Currency.ZAR);
+            ticker.setCurrency(CurrencyPair.ZARBTC);
         }
         ticker.setPrice(lastTrade);
         ticker.setTimestamp(timestamp);

@@ -30,7 +30,7 @@ public class Ticker {
     @GeneratedValue
     private Long id;
     private Date timestamp;
-    private Currency currency;
+    private CurrencyPair currency;
     private Double bid;
     private Double ask;
     private Double volume;
