@@ -1,3 +1,24 @@
+# Projects
+
+Here are a bunch of micro serices, each runs independantly, also integrates with the other services running in conjunction with it.
+
+## Ticker
+
+Gathers the latest prices of each currency pairs.
+
+```markdown
+cd ticker
+../gradlew bootRun
+```
+
+http://localhost:8000/ticker
+
+Refer to [REST API pagination in Spring](http://www.baeldung.com/rest-api-pagination-in-spring) to view objects
+
+
+
+
+
 ## Welcome to GitHub Pages
 
 You can use the [editor on GitHub](https://github.com/arnoe/codecrafter/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
