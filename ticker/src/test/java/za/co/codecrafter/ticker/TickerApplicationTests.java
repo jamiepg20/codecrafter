@@ -1,6 +1,5 @@
 package za.co.codecrafter.ticker;
 
-import mockit.Expectations;
 import mockit.Mocked;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,23 +29,23 @@ public class TickerApplicationTests {
     }
 
 
-    @Test
-    public void playPriceChangeSound() throws Exception {
-        new Expectations() {
-
-            {
-                newTicker.getPrice();
-                result = 500;
-
-                lastTicker.getPrice();
-                result = 1000;
-            }
-        };
-        instance.playPriceChangeSound(lastTicker, newTicker);
-    }
-
-//    @Test
-//    public void tickCexio() throws Exception {
-//        instance.tickCexio();
-//    }
+    //    @Test
+    //    public void playPriceChangeSound() throws Exception {
+    //        new Expectations() {
+    //
+    //            {
+    //                newTicker.getPrice();
+    //                result = 500;
+    //
+    //                lastTicker.getPrice();
+    //                result = 1000;
+    //            }
+    //        };
+    //        instance.playPriceChangeSound(lastTicker, newTicker);
+    //    }
+    //
+    //    @Test
+    //    public void tickCexio() throws Exception {
+    //        instance.tickCexio();
+    //    }
 }
