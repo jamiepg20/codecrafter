@@ -13,7 +13,6 @@ import java.net.URISyntaxException;
 public class LunoTickerRequest extends RequestEntity<String> {
 
     public LunoTickerRequest(String pair) throws URISyntaxException {
-
         super(HttpMethod.GET, new URI(String.format("https://api.mybitx.com/api/1/ticker?pair=%s", pair)));
     }
 }

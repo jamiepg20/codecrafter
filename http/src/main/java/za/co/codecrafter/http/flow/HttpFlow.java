@@ -30,9 +30,10 @@ public abstract class HttpFlow<Request extends RequestEntity<String>, Response> 
 
     @Override
     public Response apply(Request request) {
-        ResponseEntity<String> response = httpClient.execute(request, String.class);
-        validate(request, response);
-        return convert(response);
+        //        ResponseEntity<String> response = httpClient.execute(request, String.class);
+        //        validate(request, response);
+        //        return convert(response);
+        return null;
     }
 
     private Response convert(ResponseEntity<String> response) {

@@ -6,22 +6,20 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import za.co.codecrafter.http.HttpClient;
+import za.co.codecrafter.ticker.common.TickerResponse;
 import za.co.codecrafter.ticker.dao.TickerDao;
 import za.co.codecrafter.ticker.integration.bitstamp.BitstampMapper;
-import za.co.codecrafter.ticker.integration.bitstamp.BitstampTickerFlow;
 import za.co.codecrafter.ticker.integration.bitstamp.BitstampTickerRequest;
 import za.co.codecrafter.ticker.integration.bitstamp.BitstampTickerResponse;
 import za.co.codecrafter.ticker.integration.cexio.CexioMapper;
-import za.co.codecrafter.ticker.integration.cexio.CexioTickerFlow;
 import za.co.codecrafter.ticker.integration.cexio.CexioTickerRequest;
 import za.co.codecrafter.ticker.integration.cexio.CexioTickerResponse;
-import za.co.codecrafter.ticker.integration.fixer.FixerFlow;
 import za.co.codecrafter.ticker.integration.fixer.FixerRequest;
 import za.co.codecrafter.ticker.integration.fixer.FixerResponse;
 import za.co.codecrafter.ticker.integration.luno.LunoMapper;
-import za.co.codecrafter.ticker.integration.luno.LunoTickerFlow;
 import za.co.codecrafter.ticker.integration.luno.LunoTickerRequest;
 import za.co.codecrafter.ticker.integration.luno.LunoTickerResponse;
+import za.co.codecrafter.ticker.mapper.TickerMapper;
 import za.co.codecrafter.ticker.model.Source;
 import za.co.codecrafter.ticker.model.Ticker;
 
@@ -47,7 +45,6 @@ public class TickerApplication {
     @Autowired
     private TickerDao tickerDao;
 
-
     public static void main(String[] args) {
         SpringApplication.run(TickerApplication.class, args);
     }
@@ -61,10 +58,7 @@ public class TickerApplication {
         // ---------------
         // pull
         FixerRequest request = new FixerRequest("USD");
-        FixerFlow flow = new FixerFlow(client);
-        FixerResponse response = flow.apply(request);
-        // ---------------
-        // persist
+        FixerResponse response = client.execute(request, FixerResponse.class);
         usdBasedRates.putAll(response.getRates());
     }
 
@@ -73,31 +67,23 @@ public class TickerApplication {
         // -------------
         // pull
         LunoTickerRequest request = new LunoTickerRequest("XBTZAR");
-        LunoTickerFlow flow = new LunoTickerFlow(client);
-        LunoTickerResponse response = flow.apply(request);
-        // -------------
-        LunoMapper mapper = new LunoMapper(usdBasedRates);
-        Ticker ticker = mapper.apply(response);
+        LunoTickerResponse response = client.execute(request, LunoTickerResponse.class);
         // -------------
         // persist
-        Ticker lastTicker = tickerDao.findFirstBySourceOrderByIdDesc(Source.Luno);
-        alertOnChange(ticker, lastTicker);
+        Ticker ticker = convert(new LunoMapper(usdBasedRates), response);
+        alertAndPersistOnChange(ticker);
     }
 
-    //    @Scheduled(fixedRate = 5000, initialDelay = 10000)
+
+//    @Scheduled(fixedRate = 5000, initialDelay = 10000)
     public void tickCexio() throws URISyntaxException {
         // -------------
         // pull
         CexioTickerRequest request = new CexioTickerRequest();
-        CexioTickerFlow flow = new CexioTickerFlow(client);
-        CexioTickerResponse response = flow.apply(request);
+        CexioTickerResponse response = client.execute(request, CexioTickerResponse.class);
         // -------------
-        CexioMapper mapper = new CexioMapper();
-        Ticker ticker = mapper.apply(response);
-        // -------------
-        // persist
-        Ticker lastTicker = tickerDao.findFirstBySourceOrderByIdDesc(Source.Cexio);
-        alertOnChange(ticker, lastTicker);
+        Ticker ticker = convert(new CexioMapper(), response);
+//        alertAndPersistOnChange(ticker);
     }
 
 
@@ -106,18 +92,18 @@ public class TickerApplication {
         // -------------
         // pull
         BitstampTickerRequest request = new BitstampTickerRequest("btcusd");
-        BitstampTickerFlow flow = new BitstampTickerFlow(client);
-        BitstampTickerResponse response = flow.apply(request);
+        BitstampTickerResponse response = client.execute(request, BitstampTickerResponse.class);
         // -------------
-        BitstampMapper mapper = new BitstampMapper();
-        Ticker ticker = mapper.apply(response);
-        // -------------
-        // persist
-        Ticker lastTicker = tickerDao.findFirstBySourceOrderByIdDesc(Source.Bitstamp);
-        alertOnChange(ticker, lastTicker);
+        Ticker ticker = convert(new BitstampMapper(), response);
+        alertAndPersistOnChange(ticker);
     }
 
-    private void alertOnChange(Ticker ticker, Ticker lastTicker) {
+    private <T extends TickerResponse> Ticker convert(TickerMapper<T> mapper, T response) {
+        return mapper.apply(response);
+    }
+
+    private void alertAndPersistOnChange(Ticker ticker) {
+        Ticker lastTicker = tickerDao.findFirstBySourceOrderByIdDesc(Source.Bitstamp);
         if (!ticker.equals(lastTicker)) {
             tickerDao.save(ticker);
             playPriceChangeSound(lastTicker, ticker);

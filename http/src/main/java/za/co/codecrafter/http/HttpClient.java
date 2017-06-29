@@ -7,7 +7,6 @@ package za.co.codecrafter.http;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 
@@ -19,7 +18,8 @@ public class HttpClient {
     protected static final Log logger = LogFactory.getLog(HttpClient.class);
     private RestTemplate restTemplate = new RestTemplate();
 
-    public <Payload, T> ResponseEntity<T> execute(RequestEntity<Payload> request, Class<T> responseClass) {
-        return restTemplate.exchange(request.getUrl().toString(), request.getMethod(), request, responseClass);
+    public <T> T execute(RequestEntity request, Class<T> responseClass) {
+        //        return restTemplate.exchange(request.getUrl(), request.getMethod(), request, responseClass).getBody();
+        return restTemplate.exchange(request, responseClass).getBody();
     }
 }
