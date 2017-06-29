@@ -45,8 +45,8 @@ public class TickerApplicationTests {
         instance.playPriceChangeSound(lastTicker, newTicker);
     }
 
-    @Test
-    public void tickCexio() throws Exception {
-        instance.tickCexio();
-    }
+//    @Test
+//    public void tickCexio() throws Exception {
+//        instance.tickCexio();
+//    }
 }
