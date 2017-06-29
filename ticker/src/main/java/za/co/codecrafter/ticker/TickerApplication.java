@@ -11,16 +11,12 @@ import za.co.codecrafter.ticker.dao.TickerDao;
 import za.co.codecrafter.ticker.integration.bitstamp.BitstampMapper;
 import za.co.codecrafter.ticker.integration.bitstamp.BitstampTickerRequest;
 import za.co.codecrafter.ticker.integration.bitstamp.BitstampTickerResponse;
-import za.co.codecrafter.ticker.integration.cexio.CexioMapper;
-import za.co.codecrafter.ticker.integration.cexio.CexioTickerRequest;
-import za.co.codecrafter.ticker.integration.cexio.CexioTickerResponse;
 import za.co.codecrafter.ticker.integration.fixer.FixerRequest;
 import za.co.codecrafter.ticker.integration.fixer.FixerResponse;
 import za.co.codecrafter.ticker.integration.luno.LunoMapper;
 import za.co.codecrafter.ticker.integration.luno.LunoTickerRequest;
 import za.co.codecrafter.ticker.integration.luno.LunoTickerResponse;
 import za.co.codecrafter.ticker.mapper.TickerMapper;
-import za.co.codecrafter.ticker.model.Source;
 import za.co.codecrafter.ticker.model.Ticker;
 
 import javax.annotation.PostConstruct;
@@ -53,7 +49,7 @@ public class TickerApplication {
     public void init() {
     }
 
-    @Scheduled(fixedRate = 10000, initialDelay = 0)
+    @Scheduled(fixedRate = 5000, initialDelay = 0)
     public void tickFixerUsdBased() throws URISyntaxException {
         // ---------------
         // pull
@@ -69,45 +65,43 @@ public class TickerApplication {
         LunoTickerRequest request = new LunoTickerRequest("XBTZAR");
         LunoTickerResponse response = client.execute(request, LunoTickerResponse.class);
         // -------------
-        // persist
-        Ticker ticker = convert(new LunoMapper(usdBasedRates), response);
-        alertAndPersistOnChange(ticker);
+        LunoMapper mapper = new LunoMapper(usdBasedRates);
+        alertAndPersistOnChange(convert(mapper, response),
+                tickerDao.findFirstBySourceOrderByIdDesc(mapper.getSource()));
     }
 
+    //    @Scheduled(fixedRate = 5000, initialDelay = 10000)
+    //    public void tickCexio() throws URISyntaxException {
+    //        CexioTickerRequest request = new CexioTickerRequest();
+    //        CexioTickerResponse response = client.execute(request, CexioTickerResponse.class);
+    //        Ticker ticker = convert(new CexioMapper(), response);
+    //    }
 
-//    @Scheduled(fixedRate = 5000, initialDelay = 10000)
-    public void tickCexio() throws URISyntaxException {
-        // -------------
-        // pull
-        CexioTickerRequest request = new CexioTickerRequest();
-        CexioTickerResponse response = client.execute(request, CexioTickerResponse.class);
-        // -------------
-        Ticker ticker = convert(new CexioMapper(), response);
-//        alertAndPersistOnChange(ticker);
-    }
-
-
-    @Scheduled(fixedRate = 5000, initialDelay = 10000)
+    @Scheduled(fixedRate = 5000, initialDelay = 0)
     public void tickBitstamp() throws URISyntaxException {
         // -------------
         // pull
         BitstampTickerRequest request = new BitstampTickerRequest("btcusd");
         BitstampTickerResponse response = client.execute(request, BitstampTickerResponse.class);
         // -------------
-        Ticker ticker = convert(new BitstampMapper(), response);
-        alertAndPersistOnChange(ticker);
+        BitstampMapper mapper = new BitstampMapper();
+        alertAndPersistOnChange(convert(mapper, response),
+                tickerDao.findFirstBySourceOrderByIdDesc(mapper.getSource()));
     }
 
     private <T extends TickerResponse> Ticker convert(TickerMapper<T> mapper, T response) {
         return mapper.apply(response);
     }
 
-    private void alertAndPersistOnChange(Ticker ticker) {
-        Ticker lastTicker = tickerDao.findFirstBySourceOrderByIdDesc(Source.Bitstamp);
-        if (!ticker.equals(lastTicker)) {
+    private void alertAndPersistOnChange(Ticker ticker, Ticker persistent) {
+        if (isDifferent(ticker, persistent)) {
             tickerDao.save(ticker);
-            playPriceChangeSound(lastTicker, ticker);
+            playPriceChangeSound(persistent, ticker);
         }
+    }
+
+    private static boolean isDifferent(Ticker ticker, Ticker persistent) {
+        return !ticker.equals(persistent);
     }
 
     protected void playPriceChangeSound(Ticker lastTicker, Ticker newTicker) {

@@ -1,5 +1,6 @@
 package za.co.codecrafter.ticker.mapper;
 
+import lombok.Getter;
 import za.co.codecrafter.ticker.common.TickerResponse;
 import za.co.codecrafter.ticker.model.CurrencyPair;
 import za.co.codecrafter.ticker.model.Source;
@@ -12,6 +13,7 @@ import java.util.function.Function;
 /**
  * Created by arnoe on 2017/06/28.
  */
+@Getter
 public abstract class TickerMapper<T extends TickerResponse> implements Function<T, Ticker> {
 
     private final Source source;
