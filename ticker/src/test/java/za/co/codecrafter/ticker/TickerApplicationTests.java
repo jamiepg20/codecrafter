@@ -35,10 +35,10 @@ public class TickerApplicationTests {
         new Expectations() {
 
             {
-                newTicker.getLastTrade();
+                newTicker.getPrice();
                 result = 500;
 
-                lastTicker.getLastTrade();
+                lastTicker.getPrice();
                 result = 1000;
             }
         };

@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import za.co.codecrafter.ticker.model.Source;
 import za.co.codecrafter.ticker.model.Ticker;
 
 
@@ -17,6 +18,8 @@ public interface TickerDao extends CrudRepository<Ticker, Long> {
     Iterable<Ticker> findAll();
 
     Ticker findFirstByOrderByIdDesc();
+
+    Ticker findFirstBySourceOrderByIdDesc(Source source);
 
     Page<Ticker> findAll(Pageable pageable);
 }

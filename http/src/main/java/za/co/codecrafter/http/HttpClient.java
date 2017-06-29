@@ -20,6 +20,6 @@ public class HttpClient {
     private RestTemplate restTemplate = new RestTemplate();
 
     public <Payload, T> ResponseEntity<T> execute(RequestEntity<Payload> request, Class<T> responseClass) {
-        return restTemplate.exchange(request, responseClass);
+        return restTemplate.exchange(request.getUrl().toString(), request.getMethod(), request, responseClass);
     }
 }

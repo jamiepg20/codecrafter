@@ -8,9 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 
@@ -30,9 +28,15 @@ public class Ticker {
     @GeneratedValue
     private Long id;
     private Date timestamp;
+    @Enumerated(EnumType.STRING)
     private CurrencyPair currency;
+    private Double price;
+
     private Double bid;
     private Double ask;
+
     private Double volume;
-    private Double price;
+
+    @Enumerated(EnumType.STRING)
+    private Source source;
 }
