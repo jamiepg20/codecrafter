@@ -1,20 +1,66 @@
 # Projects
 
-Here are a bunch of micro serices, each runs independantly, also integrates with the other services running in conjunction with it.
+Here are a bunch of micro serices, each runs independantly, also integrates with the other services running in conjunction.
 
 ## Ticker
 
-Gathers the latest prices of each currency pairs.
+Gathers the latest prices of each of these vendors
+
+#### Vendors
+- luno.com _(using fixer.io to convert ZAR to USD)_
+- bitstamp.net
+- cex.io (incomplete)
+
+### Database
+
+First of all you'll need a database
 
 ```markdown
+create database repository;
+show databases;
+create user coder;
+grant all on repository.* to 'coder'@'localhost' identified by 'coffee';
+```
+
+### Checkout, build, start app
+
+Pull the latest code from repository, execute bootRun, which will clean, build and run the ticker services
+
+```markdown
+git clone git@github.com:arnoe/codecrafter.git
+cd codecrafter
 cd ticker
 ../gradlew bootRun
 ```
 
-http://localhost:8000/ticker
+### Analysis
+
+#### REST
+Latest tickers
+http://localhost:8000/ticker?sort=timestamp,desc&size=5
 
 Refer to [REST API pagination in Spring](http://www.baeldung.com/rest-api-pagination-in-spring) to view objects
 
+#### MySQL
+
+```markdown
+SELECT
+  source,
+  concat(round(min(price)), ' USD') AS min,
+  concat(round(max(price)), ' USD') AS max,
+  max(price) - min(price) AS spread
+FROM ticker 
+GROUP BY source
+```
+
+## Equity
+
+Having accounts with some of these following vendors, it would be nice to track your equity.  Ideally this app should be lauched with your own account details, which will track your own equity.
+
+#### Vendors 
+- luno.com _(using fixer.io to convert ZAR to USD)_
+- bitstamp.net
+- cex.io (incomplete)
 
 
 
@@ -22,10 +68,8 @@ Refer to [REST API pagination in Spring](http://www.baeldung.com/rest-api-pagina
 
 
 
-
-
-
-
+_ignore any thing below this line for now_
+______________________________________________________________________________
 
 
 ## Welcome to GitHub Pages
