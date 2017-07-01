@@ -14,6 +14,10 @@ create user coder;
 grant all on repository.* to 'coder'@'localhost' identified by 'coffee';
 ```
 
+Current Projects
+- [Ticker](https://github.com/arnoe/codecrafter/tree/master/ticker)
+- [Equity](https://github.com/arnoe/codecrafter/tree/master/equity)
+
 
 _ignore any thing below this line for now_
 ______________________________________________________________________________
