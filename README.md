@@ -10,8 +10,8 @@ First of all you'll need a database.   Any of the spring boot apps will take res
 ```markdown
 create database repository;
 show databases;
-create user coder;
-grant all on repository.* to 'coder'@'localhost' identified by 'coffee';
+create user root;
+grant all on repository.* to 'root'@'localhost' identified by 'supercalifragilistickexpialidocious';
 ```
 
 Current Projects
