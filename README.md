@@ -6,7 +6,8 @@ Here are a bunch of micro serices, each runs independantly, also integrates with
 
 First of all you'll need a database.   Any of the spring boot apps will take responsibility to update or alter their own schema within this one datasource. (KIS for now)
 
-**MySQL**
+
+**On localhost MySQL**
 ```markdown
 create database repository;
 show databases;
