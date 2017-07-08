@@ -22,4 +22,6 @@ public interface TickerDao extends CrudRepository<Ticker, Long> {
     Ticker findFirstBySourceOrderByIdDesc(Source source);
 
     Page<Ticker> findAll(Pageable pageable);
+
+    Iterable<Ticker> findBySource(Source source);
 }

@@ -51,6 +51,7 @@ public class TickerApplication {
 
     @Scheduled(fixedRate = 5000, initialDelay = 0)
     public void tickFixerUsdBased() throws URISyntaxException {
+
         // ---------------
         // pull
         FixerRequest request = new FixerRequest("USD");
@@ -77,7 +78,7 @@ public class TickerApplication {
     //        Ticker ticker = convert(new CexioMapper(), response);
     //    }
 
-    @Scheduled(fixedRate = 5000, initialDelay = 0)
+    @Scheduled(fixedRate = 15000, initialDelay = 10000)
     public void tickBitstamp() throws URISyntaxException {
         // -------------
         // pull
