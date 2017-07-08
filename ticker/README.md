@@ -31,13 +31,20 @@ DB you will need an internet connection, and has not setup overhead other than r
 
 #### View
 
-Now you are ready to view your locally running [ticker service](http://localhost:9000), have fun!
+Now you are ready to view your locally running [ticker service](http://localhost:8080), have fun!
 
 
 ## REST API
 
-Latest tickers: [http://localhost:9000/ticker?sort=timestamp,desc&size=5](http://localhost:9000/ticker?sort=timestamp,desc&size=5)
+Latest tickers: [http://localhost:8080/tickers](http://localhost:8080/tickers)
 
 Refer to [REST API pagination in Spring](http://www.baeldung.com/rest-api-pagination-in-spring) to understand pagination 
 of spring objects
+
+#### Current REST objects
+
+Viewable [here](http://localhost:8080/profile)
+
+* Ticker (/ticker)
+* Order (/order)
 
