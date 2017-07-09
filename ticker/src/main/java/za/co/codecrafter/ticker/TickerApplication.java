@@ -32,6 +32,7 @@ import java.util.logging.Logger;
  */
 @SpringBootApplication
 @EnableScheduling
+//public class TickerApplication extends SpringBootServletInitializer {
 public class TickerApplication {
 
     private Logger logger = Logger.getLogger(getClass().getName());
@@ -41,9 +42,25 @@ public class TickerApplication {
     @Autowired
     private TickerDao tickerDao;
 
+    /**
+     * Running as a JAR, this method will be called
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         SpringApplication.run(TickerApplication.class, args);
     }
+
+    //    /**
+    //     * Running as a WAR, this method will be called
+    //     *
+    //     * @param builder
+    //     * @return
+    //     */
+    //    @Override
+    //    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+    //        return builder.sources(TickerApplication.class);
+    //    }
 
     @PostConstruct
     public void init() {
