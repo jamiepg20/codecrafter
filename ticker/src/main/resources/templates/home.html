@@ -53,18 +53,10 @@
         chart: {
             events: {
                 load: function () {
-
-                    // set up the updating of the chart each second
                     var series0 = this.series[0];
                     var series1 = this.series[1];
                     setInterval(function () {
                         ajaxGet(series0, series1);
-                        // ajaxGet();
-//                        var time = new Date().getTime(); // current time
-//                        var l = Math.round((Math.random() * 60) + 2500);
-//                        var b = Math.round((Math.random() * 60) + 2500);
-//                        series0.addPoint([time, l], true, true);
-//                        series1.addPoint([time, b], true, true);
                     }, 3000);
                 }
             }
@@ -79,7 +71,23 @@
                 count: 5,
                 type: 'minute',
                 text: '5M'
+            },  {
+                count: 15,
+                type: 'minute',
+                text: '15M'
             }, {
+                count: 1,
+                type: 'hour',
+                text: '1H'
+            }, {
+                count: 2,
+                type: 'hour',
+                text: '2H'
+            }, {
+                count: 4,
+                type: 'hour',
+                text: '4H'
+            },{
                 type: 'all',
                 text: 'All'
             }],
@@ -90,7 +98,7 @@
         yAxis: {
             labels: {
                 formatter: function () {
-                    return (this.value > 0 ? ' + ' : '') + this.value + ' BTC';
+                    return (this.value > 0 ? ' + ' : '') + this.value + ' %';
                 }
             },
             plotLines: [{
@@ -108,7 +116,7 @@
         },
 
         tooltip: {
-            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change} BTC)<br/>',
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change} %)<br/>',
             valueDecimals: 2,
             split: true
         },
