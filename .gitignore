@@ -1,6 +1,7 @@
 logs
 **/logs
 .gradle
+out
 **/.gradle
 .idea
 **/.idea
