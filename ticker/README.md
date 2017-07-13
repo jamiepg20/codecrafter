@@ -1,7 +1,7 @@
 # ticker
 
 The ticker app is an easy to launch [Spring Boot](https://projects.spring.io/spring-boot/) app that only focus to gather 
-public [Bitcoin](https://www.youtube.com/watch?v=Um63OQz3bjo) prices from different platforms.  In doing so, it persists the values to a database .  This ticker service will then also expose a REST API which can be used by more autonomous services.  Prices from all platforms will be based on USD (by using [fixer.io](http://api.fixer.io/latest?base=USD)).
+public [Bitcoin](https://www.youtube.com/watch?v=Um63OQz3bjo) prices from different Bitcoin exchanges.  In doing so, it persists the values to a database .  This ticker service will then also expose a REST API which can be used by more autonomous services.  Prices from all exchanges will be based on USD (by using [fixer.io](http://api.fixer.io/latest?base=USD)).
 
 #### Currently integrated with
 - [luno.com](https://www.luno.com/)
