@@ -1,6 +1,29 @@
+service: code-crafter-ticker
 runtime: java7
 env: flex
 
 handlers:
 - url: /.*
   script: this field is required, but ignored
+
+runtime_config:
+   jdk: openjdk8
+   server: jetty9
+
+health_check:
+  enable_health_check: True
+  check_interval_sec: 5
+  timeout_sec: 4
+  unhealthy_threshold: 2
+  healthy_threshold: 2
+
+beta_settings:
+  java_quickstart: true
+
+
+automatic_scaling:
+  min_num_instances: 1
+  max_num_instances: 3
+  cool_down_period_sec: 120 # default value
+  cpu_utilization:
+    target_utilization: 0.5
