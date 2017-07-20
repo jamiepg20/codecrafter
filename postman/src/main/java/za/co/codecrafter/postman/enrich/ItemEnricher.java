@@ -21,6 +21,10 @@ public class ItemEnricher extends Enricher<Item> {
 
     public ItemEnricher(Environment environment) {
         super(environment);
+        stringEnricher = new StringEnricher(environment);
+        eventEnricher = new EventEnricher(environment);
+        requestEnricher = new RequestEnricher(environment);
+        responseEnricher = new ResponseEnricher(environment);
     }
 
     @Override

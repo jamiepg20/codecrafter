@@ -25,11 +25,11 @@ public class RequestEnricher extends Enricher<Request> {
     @Override
     public Request apply(Request request) {
         Request enriched = new Request();
-        enriched.setUrl(stringEnricher.apply(request.getUrl()));
-        enriched.setDescription(stringEnricher.apply(request.getDescription()));
-        enriched.setHeader(enrichList(request.getHeader()));
-        enriched.setBody(bodyEnricher.apply(request.getBody()));
         enriched.setMethod(request.getMethod());
+        enriched.setUrl(stringEnricher.apply(request.getUrl()));
+        enriched.setBody(bodyEnricher.apply(request.getBody()));
+        enriched.setHeader(enrichList(request.getHeader()));
+        enriched.setDescription(stringEnricher.apply(request.getDescription()));
         return enriched;
     }
 

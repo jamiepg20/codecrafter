@@ -20,6 +20,7 @@ public class HeaderEnricher extends Enricher<Header> {
     public Header apply(Header header) {
         Header enriched = new Header();
         enriched.setDescription(stringEnricher.apply(header.getDescription()));
+        enriched.setKey(header.getKey());
         enriched.setValue(stringEnricher.apply(header.getValue()));
         return enriched;
     }

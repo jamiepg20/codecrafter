@@ -27,34 +27,46 @@ public class HeaderEnricherTest {
     public void apply() throws Exception {
         ArrayList<Value> values = new ArrayList<>();
         values.add(value);
+
         new Expectations() {
 
             {
-                //                header.getDescription();
-                //                result = "This is my {{key}}";
-
                 environment.getValues();
                 result = values;
-                times = 2;
 
+                value.getKey();
+                result = "key";
 
                 value.getValue();
                 result = "VALUE";
 
-                //                value.getKey();
-                //                result = "key";
-                //                times = 1;
+                environment.getValues();
+                result = values;
 
+                value.getKey();
+                result = "key";
+
+                value.getValue();
+                result = "VALUE";
             }
         };
         instance = new HeaderEnricher(environment);
-        Header header = new Header();
-        header.setDescription("This is my {{key}}");
-        header.setValue("{{key}}");
-        header.setKey("key");
-        Header actual = instance.apply(header);
+
+        Header before = new Header();
+        before.setDescription("This is my {{key}}");
+        before.setValue("{{key}}");
+        before.setKey("key");
+        Header actual = instance.apply(before);
         assertEquals("This is my VALUE", actual.getDescription());
+        assertEquals("key", actual.getKey());
+        assertEquals("VALUE", actual.getValue());
         //        assertEquals("HEADER.VALUE", actual.getValue());
     }
 
+    //    private Value createValue(String key, String value) {
+    //        Value result = new Value();
+    //        result.setKey(key);
+    //        result.setValue(value);
+    //        return result;
+    //    }
 }

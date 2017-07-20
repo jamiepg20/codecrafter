@@ -1,25 +1,13 @@
 version = '1.0-SNAPSHOT'
-buildscript {
-    ext {
-        springBootVersion = '1.5.3.RELEASE'
-    }
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-    }
-}
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
-apply plugin: 'org.springframework.boot'
 
 dependencies {
     // ---------------
-    // WEB Stuff
-    compile("org.springframework.boot:spring-boot-starter-web")
+    compile group: 'org.springframework', name: 'spring-web', version: '4.3.8.RELEASE'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.8.9'
 
     testCompile("junit:junit")
 }

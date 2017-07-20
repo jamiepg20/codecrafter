@@ -19,7 +19,7 @@ public class InfoEnricher extends Enricher<Info> {
     @Override
     public Info apply(Info info) {
         Info enriched = new Info();
-        enriched.setName(stringEnricher.apply(info.getName()));
+        enriched.setName(info.getName());
         enriched.set_postman_id(info.get_postman_id());
         enriched.setDescription(stringEnricher.apply(info.getDescription()));
         enriched.setSchema(info.getSchema());
