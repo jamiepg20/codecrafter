@@ -11,6 +11,7 @@ import za.co.codecrafter.postman.model.Request;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -51,7 +52,7 @@ public class ItemEnricherTest {
 
         Item actual = instance.apply(item);
         assertEquals("POSTMANID", actual.get_postman_id());
-        assertEquals("", actual.getEvent());
+        assertTrue(actual.getEvent().isEmpty());
     }
 
 }
