@@ -2,6 +2,7 @@ logs
 **/logs
 .gradle
 out
+*.iml
 **/.gradle
 .idea
 **/.idea
