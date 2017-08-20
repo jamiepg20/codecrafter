@@ -2,6 +2,7 @@ package za.co.codecrafter.postman;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import za.co.codecrafter.http.HttpClient;
@@ -30,9 +31,9 @@ public class PostmanApi {
 
     private static final Logger log = LoggerFactory.getLogger(PostmanApi.class);
 
-    //    public static void main(String args[]) {
-    //        SpringApplication.run(PostmanApi.class, args);
-    //    }
+    public static void main(String args[]) {
+        SpringApplication.run(PostmanApi.class, args);
+    }
 
 //    public static void main(String[] args) {
 //        List<Environment> environments = getEnvironments();
