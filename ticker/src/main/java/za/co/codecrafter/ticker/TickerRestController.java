@@ -26,14 +26,19 @@ public class TickerRestController {
     public List<Ticker> tickers() {
         ArrayList<Ticker> tickers = new ArrayList<>();
         Date now = new Date();
-        Ticker luno = tickerDao.findFirstBySourceOrderByIdDesc(Source.Luno);
 
+        Ticker luno = tickerDao.findFirstBySourceOrderByIdDesc(Source.Luno);
         luno.setTimestamp(now);
+        tickers.add(luno);
+
         Ticker bitstamp = tickerDao.findFirstBySourceOrderByIdDesc(Source.Bitstamp);
         bitstamp.setTimestamp(now);
-
-        tickers.add(luno);
         tickers.add(bitstamp);
+
+        Ticker kraken = tickerDao.findFirstBySourceOrderByIdDesc(Source.Kraken);
+        kraken.setTimestamp(now);
+        tickers.add(kraken);
+
         return tickers;
     }
 }

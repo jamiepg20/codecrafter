@@ -34,12 +34,12 @@ public class PostmanApi {
     //        SpringApplication.run(PostmanApi.class, args);
     //    }
 
-    public static void main(String[] args) {
-        List<Environment> environments = getEnvironments();
-        environments.forEach(environment -> log.info(environment.getUid()));
-        Environment environment = environments.iterator().next();
-        log.info(getEnvironment(environment.getUid()).toString());
-    }
+//    public static void main(String[] args) {
+//        List<Environment> environments = getEnvironments();
+//        environments.forEach(environment -> log.info(environment.getUid()));
+//        Environment environment = environments.iterator().next();
+//        log.info(getEnvironment(environment.getUid()).toString());
+//    }
 
     @PostConstruct
     public void init() {

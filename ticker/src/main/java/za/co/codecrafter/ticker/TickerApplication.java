@@ -13,6 +13,9 @@ import za.co.codecrafter.ticker.integration.bitstamp.BitstampTickerRequest;
 import za.co.codecrafter.ticker.integration.bitstamp.BitstampTickerResponse;
 import za.co.codecrafter.ticker.integration.fixer.FixerRequest;
 import za.co.codecrafter.ticker.integration.fixer.FixerResponse;
+import za.co.codecrafter.ticker.integration.kraken.KrakenMapper;
+import za.co.codecrafter.ticker.integration.kraken.KrakenTickerRequest;
+import za.co.codecrafter.ticker.integration.kraken.KrakenTickerResponse;
 import za.co.codecrafter.ticker.integration.luno.LunoMapper;
 import za.co.codecrafter.ticker.integration.luno.LunoTickerRequest;
 import za.co.codecrafter.ticker.integration.luno.LunoTickerResponse;
@@ -21,6 +24,7 @@ import za.co.codecrafter.ticker.model.Ticker;
 
 import javax.annotation.PostConstruct;
 import javax.sound.midi.MidiUnavailableException;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +41,7 @@ public class TickerApplication {
 
     private Logger logger = Logger.getLogger(getClass().getName());
     private HttpClient client = new HttpClient();
-    private Map<String, String> usdBasedRates = new HashMap<>();
+    private Map<String, String> usdBasedConversionRates = new HashMap<>();
 
     @Autowired
     private TickerDao tickerDao;
@@ -73,7 +77,7 @@ public class TickerApplication {
         // pull
         FixerRequest request = new FixerRequest("USD");
         FixerResponse response = client.execute(request, FixerResponse.class);
-        usdBasedRates.putAll(response.getRates());
+        usdBasedConversionRates.putAll(response.getRates());
     }
 
     @Scheduled(fixedRate = 15000, initialDelay = 10000)
@@ -83,10 +87,23 @@ public class TickerApplication {
         LunoTickerRequest request = new LunoTickerRequest("XBTZAR");
         LunoTickerResponse response = client.execute(request, LunoTickerResponse.class);
         // -------------
-        LunoMapper mapper = new LunoMapper(usdBasedRates);
+        LunoMapper mapper = new LunoMapper(usdBasedConversionRates);
         alertAndPersistOnChange(convert(mapper, response),
                 tickerDao.findFirstBySourceOrderByIdDesc(mapper.getSource()));
     }
+
+    @Scheduled(fixedRate = 15000, initialDelay = 10000)
+    public void tickKraken() throws URISyntaxException, IOException {
+        // -------------
+        // pull
+        KrakenTickerRequest request = new KrakenTickerRequest("XXBTZUSD");
+        KrakenTickerResponse response = client.execute(request, KrakenTickerResponse.class);
+        // -------------
+        KrakenMapper mapper = new KrakenMapper();
+        alertAndPersistOnChange(convert(mapper, response),
+                tickerDao.findFirstBySourceOrderByIdDesc(mapper.getSource()));
+    }
+
 
     //    @Scheduled(fixedRate = 5000, initialDelay = 10000)
     //    public void tickCexio() throws URISyntaxException {
@@ -135,10 +152,10 @@ public class TickerApplication {
             Tone tone = new Tone();
             if (differenceDouble > 0) {
                 double v = Math.abs(differenceDouble);
-                tone.goingUp((int)v);
+                tone.goingUp((int) v);
             } else if (differenceDouble < 0) {
                 double v = Math.abs(differenceDouble);
-                tone.goingDown((int)v);
+                tone.goingDown((int) v);
             }
         } catch (MidiUnavailableException e) {
             e.printStackTrace();

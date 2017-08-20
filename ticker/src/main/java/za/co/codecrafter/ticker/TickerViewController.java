@@ -25,6 +25,7 @@ public class TickerViewController {
     public String home(Model model) {
         model.addAttribute("luno", toTwoDimensionalArray(toList(tickerDao.findBySource(Source.Luno))));
         model.addAttribute("bitstamp", toTwoDimensionalArray(toList(tickerDao.findBySource(Source.Bitstamp))));
+        model.addAttribute("kraken", toTwoDimensionalArray(toList(tickerDao.findBySource(Source.Kraken))));
         return "home";
     }
 

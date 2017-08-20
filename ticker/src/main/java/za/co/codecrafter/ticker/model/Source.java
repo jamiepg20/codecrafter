@@ -7,5 +7,6 @@ public enum Source {
 
     Bitstamp,
     Cexio,
-    Luno
+    Luno,
+    Kraken
 }
