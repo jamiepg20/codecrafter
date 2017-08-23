@@ -28,6 +28,7 @@
         <li>Luno</li>
         <li>Bitstamp</li>
         <li>Kraken</li>
+        <li>Cex.io</li>
     </ul>
 
     <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
@@ -53,6 +54,10 @@
         name: 'Kraken',
         data: [[${kraken}]]
     };
+    seriesOptions[3] = {
+        name: 'Cex.io',
+        data: [[${cexio}]]
+    };
 
     Highcharts.stockChart('container', {
         chart: {
@@ -61,8 +66,9 @@
                     var series0 = this.series[0];
                     var series1 = this.series[1];
                     var series2 = this.series[2];
+                    var series3 = this.series[3];
                     setInterval(function () {
-                        ajaxGet(series0, series1, series2);
+                        ajaxGet(series0, series1, series2, series3);
                     }, 3000);
                 }
             }

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import za.co.codecrafter.ticker.dao.TickerDao;
+import za.co.codecrafter.ticker.repo.TickerDao;
 import za.co.codecrafter.ticker.model.Source;
 import za.co.codecrafter.ticker.model.Ticker;
 
@@ -26,6 +26,7 @@ public class TickerViewController {
         model.addAttribute("luno", toTwoDimensionalArray(toList(tickerDao.findBySource(Source.Luno))));
         model.addAttribute("bitstamp", toTwoDimensionalArray(toList(tickerDao.findBySource(Source.Bitstamp))));
         model.addAttribute("kraken", toTwoDimensionalArray(toList(tickerDao.findBySource(Source.Kraken))));
+        model.addAttribute("cexio", toTwoDimensionalArray(toList(tickerDao.findBySource(Source.Cexio))));
         return "home";
     }
 

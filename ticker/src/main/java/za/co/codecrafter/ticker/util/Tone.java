@@ -1,4 +1,4 @@
-package za.co.codecrafter.ticker;
+package za.co.codecrafter.ticker.util;
 
 import javax.sound.midi.MidiChannel;
 import javax.sound.midi.MidiSystem;

@@ -9,19 +9,21 @@
 // });
 
 // DO GET
-function ajaxGet(series0, series1, series2) {
+function ajaxGet(series0, series1, series2, series3) {
     // var url = window.location;
     $.ajax({
         type: "GET",
         url: "http://localhost:8080/tickers",
         success: function (data) {
             var luno = data[0];
+            var bitstamp = data[1]
             var kraken = data[2];
-            var bitstamp = data[1];
+            var cexio = data[3];
 
             series0.addPoint([luno['timestamp'], luno['price']], true, true);
-            series2.addPoint([kraken['timestamp'], kraken['price']], true, true);
             series1.addPoint([bitstamp['timestamp'], bitstamp['price']], true, true);
+            series2.addPoint([kraken['timestamp'], kraken['price']], true, true);
+            series3.addPoint([cexio['timestamp'], cexio['price']], true, true);
 
         },
         error: function (e) {

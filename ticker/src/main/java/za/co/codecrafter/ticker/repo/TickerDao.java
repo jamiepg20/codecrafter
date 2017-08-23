@@ -1,4 +1,4 @@
-package za.co.codecrafter.ticker.dao;
+package za.co.codecrafter.ticker.repo;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

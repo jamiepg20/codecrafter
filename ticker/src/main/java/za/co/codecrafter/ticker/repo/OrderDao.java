@@ -1,4 +1,4 @@
-package za.co.codecrafter.ticker.dao;
+package za.co.codecrafter.ticker.repo;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;

@@ -7,10 +7,13 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import za.co.codecrafter.http.HttpClient;
 import za.co.codecrafter.ticker.common.TickerResponse;
-import za.co.codecrafter.ticker.dao.TickerDao;
+import za.co.codecrafter.ticker.repo.TickerDao;
 import za.co.codecrafter.ticker.integration.bitstamp.BitstampMapper;
 import za.co.codecrafter.ticker.integration.bitstamp.BitstampTickerRequest;
 import za.co.codecrafter.ticker.integration.bitstamp.BitstampTickerResponse;
+import za.co.codecrafter.ticker.integration.cexio.CexioMapper;
+import za.co.codecrafter.ticker.integration.cexio.CexioTickerRequest;
+import za.co.codecrafter.ticker.integration.cexio.CexioTickerResponse;
 import za.co.codecrafter.ticker.integration.fixer.FixerRequest;
 import za.co.codecrafter.ticker.integration.fixer.FixerResponse;
 import za.co.codecrafter.ticker.integration.kraken.KrakenMapper;
@@ -21,6 +24,7 @@ import za.co.codecrafter.ticker.integration.luno.LunoTickerRequest;
 import za.co.codecrafter.ticker.integration.luno.LunoTickerResponse;
 import za.co.codecrafter.ticker.mapper.TickerMapper;
 import za.co.codecrafter.ticker.model.Ticker;
+import za.co.codecrafter.ticker.util.Tone;
 
 import javax.annotation.PostConstruct;
 import javax.sound.midi.MidiUnavailableException;
@@ -105,12 +109,15 @@ public class TickerApplication {
     }
 
 
-    //    @Scheduled(fixedRate = 5000, initialDelay = 10000)
-    //    public void tickCexio() throws URISyntaxException {
-    //        CexioTickerRequest request = new CexioTickerRequest();
-    //        CexioTickerResponse response = client.execute(request, CexioTickerResponse.class);
-    //        Ticker ticker = convert(new CexioMapper(), response);
-    //    }
+    @Scheduled(fixedRate = 15000, initialDelay = 100)
+    public void tickCexio() throws URISyntaxException {
+        CexioTickerRequest request = new CexioTickerRequest();
+//        System.out.println(client.execute(request, String.class));
+        CexioTickerResponse response = client.execute(request, CexioTickerResponse.class);
+        CexioMapper mapper = new CexioMapper();
+        Ticker ticker = convert(mapper, response);
+        alertAndPersistOnChange(ticker,tickerDao.findFirstBySourceOrderByIdDesc(mapper.getSource()) );
+    }
 
     @Scheduled(fixedRate = 15000, initialDelay = 10000)
     public void tickBitstamp() throws URISyntaxException {
@@ -131,7 +138,7 @@ public class TickerApplication {
     private void alertAndPersistOnChange(Ticker ticker, Ticker persistent) {
         if (isDifferent(ticker, persistent)) {
             tickerDao.save(ticker);
-            playPriceChangeSound(persistent, ticker);
+//            playPriceChangeSound(persistent, ticker);
         }
     }
 

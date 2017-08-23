@@ -3,7 +3,7 @@ package za.co.codecrafter.ticker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import za.co.codecrafter.ticker.dao.TickerDao;
+import za.co.codecrafter.ticker.repo.TickerDao;
 import za.co.codecrafter.ticker.model.Source;
 import za.co.codecrafter.ticker.model.Ticker;
 
@@ -38,6 +38,10 @@ public class TickerRestController {
         Ticker kraken = tickerDao.findFirstBySourceOrderByIdDesc(Source.Kraken);
         kraken.setTimestamp(now);
         tickers.add(kraken);
+
+        Ticker cexio = tickerDao.findFirstBySourceOrderByIdDesc(Source.Cexio);
+        cexio.setTimestamp(now);
+        tickers.add(cexio);
 
         return tickers;
     }
