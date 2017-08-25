@@ -58,6 +58,10 @@
         name: 'Cex.io',
         data: [[${cexio}]]
     };
+    seriesOptions[4] = {
+        name: 'Coinbase',
+        data: [[${coinbase}]]
+    };
 
     Highcharts.stockChart('container', {
         chart: {
@@ -67,8 +71,9 @@
                     var series1 = this.series[1];
                     var series2 = this.series[2];
                     var series3 = this.series[3];
+                    var series4 = this.series[4];
                     setInterval(function () {
-                        ajaxGet(series0, series1, series2, series3);
+                        ajaxGet(series0, series1, series2, series3, series4);
                     }, 3000);
                 }
             }

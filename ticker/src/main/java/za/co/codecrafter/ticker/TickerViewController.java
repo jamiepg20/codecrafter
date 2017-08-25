@@ -27,6 +27,7 @@ public class TickerViewController {
         model.addAttribute("bitstamp", toTwoDimensionalArray(toList(tickerDao.findBySource(Source.Bitstamp))));
         model.addAttribute("kraken", toTwoDimensionalArray(toList(tickerDao.findBySource(Source.Kraken))));
         model.addAttribute("cexio", toTwoDimensionalArray(toList(tickerDao.findBySource(Source.Cexio))));
+        model.addAttribute("coinbase", toTwoDimensionalArray(toList(tickerDao.findBySource(Source.Coinbase))));
         return "home";
     }
 

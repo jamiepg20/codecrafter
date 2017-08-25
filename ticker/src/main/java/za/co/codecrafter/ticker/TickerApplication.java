@@ -1,5 +1,6 @@
 package za.co.codecrafter.ticker;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,13 +8,15 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import za.co.codecrafter.http.HttpClient;
 import za.co.codecrafter.ticker.common.TickerResponse;
-import za.co.codecrafter.ticker.repo.TickerDao;
 import za.co.codecrafter.ticker.integration.bitstamp.BitstampMapper;
 import za.co.codecrafter.ticker.integration.bitstamp.BitstampTickerRequest;
 import za.co.codecrafter.ticker.integration.bitstamp.BitstampTickerResponse;
 import za.co.codecrafter.ticker.integration.cexio.CexioMapper;
 import za.co.codecrafter.ticker.integration.cexio.CexioTickerRequest;
 import za.co.codecrafter.ticker.integration.cexio.CexioTickerResponse;
+import za.co.codecrafter.ticker.integration.coinbase.CoinbaseMapper;
+import za.co.codecrafter.ticker.integration.coinbase.CoinbaseTickerRequest;
+import za.co.codecrafter.ticker.integration.coinbase.CoinbaseTickerResponse;
 import za.co.codecrafter.ticker.integration.fixer.FixerRequest;
 import za.co.codecrafter.ticker.integration.fixer.FixerResponse;
 import za.co.codecrafter.ticker.integration.kraken.KrakenMapper;
@@ -24,6 +27,7 @@ import za.co.codecrafter.ticker.integration.luno.LunoTickerRequest;
 import za.co.codecrafter.ticker.integration.luno.LunoTickerResponse;
 import za.co.codecrafter.ticker.mapper.TickerMapper;
 import za.co.codecrafter.ticker.model.Ticker;
+import za.co.codecrafter.ticker.repo.TickerDao;
 import za.co.codecrafter.ticker.util.Tone;
 
 import javax.annotation.PostConstruct;
@@ -97,6 +101,19 @@ public class TickerApplication {
     }
 
     @Scheduled(fixedRate = 15000, initialDelay = 10000)
+    public void tickCoinbase() throws URISyntaxException, IOException {
+        // -------------
+        // pull
+        CoinbaseTickerRequest request = new CoinbaseTickerRequest();
+        CoinbaseTickerResponse response = client.execute(request, CoinbaseTickerResponse.class);
+        // -------------
+        CoinbaseMapper mapper = new CoinbaseMapper();
+        alertAndPersistOnChange(convert(mapper, response),
+                tickerDao.findFirstBySourceOrderByIdDesc(mapper.getSource()));
+    }
+
+
+    @Scheduled(fixedRate = 15000, initialDelay = 10000)
     public void tickKraken() throws URISyntaxException, IOException {
         // -------------
         // pull
@@ -116,7 +133,7 @@ public class TickerApplication {
         CexioTickerResponse response = client.execute(request, CexioTickerResponse.class);
         CexioMapper mapper = new CexioMapper();
         Ticker ticker = convert(mapper, response);
-        alertAndPersistOnChange(ticker,tickerDao.findFirstBySourceOrderByIdDesc(mapper.getSource()) );
+        alertAndPersistOnChange(ticker, tickerDao.findFirstBySourceOrderByIdDesc(mapper.getSource()));
     }
 
     @Scheduled(fixedRate = 15000, initialDelay = 10000)
