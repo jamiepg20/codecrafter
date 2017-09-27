@@ -41,11 +41,8 @@ public abstract class TickerMapper<T extends TickerResponse> implements Function
 
     private static void validate(Ticker ticker) {
         assert ticker.getPrice() > 0;
-        assert ticker.getAsk() > 0;
-        assert ticker.getBid() > 0;
         assert ticker.getCurrency() != null;
         assert ticker.getSource() != null;
-        assert ticker.getVolume() > 0;
         assert ticker.getTimestamp() != null;
     }
 

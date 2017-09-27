@@ -1,6 +1,5 @@
 package za.co.codecrafter.ticker;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,6 +18,9 @@ import za.co.codecrafter.ticker.integration.coinbase.CoinbaseTickerRequest;
 import za.co.codecrafter.ticker.integration.coinbase.CoinbaseTickerResponse;
 import za.co.codecrafter.ticker.integration.fixer.FixerRequest;
 import za.co.codecrafter.ticker.integration.fixer.FixerResponse;
+import za.co.codecrafter.ticker.integration.icecubed.IceCubedMapper;
+import za.co.codecrafter.ticker.integration.icecubed.IceCubedRequest;
+import za.co.codecrafter.ticker.integration.icecubed.IceCubedResponse;
 import za.co.codecrafter.ticker.integration.kraken.KrakenMapper;
 import za.co.codecrafter.ticker.integration.kraken.KrakenTickerRequest;
 import za.co.codecrafter.ticker.integration.kraken.KrakenTickerResponse;
@@ -80,13 +82,26 @@ public class TickerApplication {
 
     @Scheduled(fixedRate = 5000, initialDelay = 0)
     public void tickFixerUsdBased() throws URISyntaxException {
-
-        // ---------------
-        // pull
-        FixerRequest request = new FixerRequest("USD");
-        FixerResponse response = client.execute(request, FixerResponse.class);
+        FixerResponse response = client.execute(new FixerRequest("USD"), FixerResponse.class);
         usdBasedConversionRates.putAll(response.getRates());
     }
+
+    @Scheduled(fixedRate = 15000, initialDelay = 10000)
+    public void tickIceCubed() throws URISyntaxException {
+        try {
+            // -------------
+            // pull
+            IceCubedRequest request = new IceCubedRequest();
+            IceCubedResponse response = client.execute(request, IceCubedResponse.class);
+            // -------------
+            IceCubedMapper mapper = new IceCubedMapper(usdBasedConversionRates);
+            alertAndPersistOnChange(convert(mapper, response.getResponse().getEntity()),
+                    tickerDao.findFirstBySourceOrderByIdDesc(mapper.getSource()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @Scheduled(fixedRate = 15000, initialDelay = 10000)
     public void tickLuno() throws URISyntaxException {

@@ -15,7 +15,7 @@ import java.util.Date;
 /**
  * Created by arnoe on 2017/05/04.
  */
-@ToString(exclude = { "id", "volume", "ask", "bid" })
+@ToString(exclude = { "id", "volume", "ask", "bid", "timestamp", "currency"})
 @EqualsAndHashCode(exclude = { "timestamp", "id", "volume" })
 @Getter
 @Setter

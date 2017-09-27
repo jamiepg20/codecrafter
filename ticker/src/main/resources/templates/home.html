@@ -25,10 +25,12 @@
 
     <h3>Bitcoin Prices tracked on theses systems</h3>
     <ul>
-        <li>Luno</li>
-        <li>Bitstamp</li>
-        <li>Kraken</li>
-        <li>Cex.io</li>
+        <li><a href="https://www.luno.com/trade/XBTZAR">Luno</a></li>
+        <li><a href="https://www.bitstamp.net/market/tradeview/full">Bitstamp</a></li>
+        <li><a href="https://www.kraken.com/charts">Kraken</a></li>
+        <li><a href="https://cex.io/btc-usd">Cex.io</a></li>
+        <li><a href="https://www.coinbase.com/charts">Coinbase</a></li>
+        <li><a href="https://ice3x.com/">IceCubed</a></li>
     </ul>
 
     <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
@@ -62,6 +64,10 @@
         name: 'Coinbase',
         data: [[${coinbase}]]
     };
+    seriesOptions[5] = {
+        name: 'IceCubed',
+        data: [[${icecubed}]]
+    };
 
     Highcharts.stockChart('container', {
         chart: {
@@ -72,8 +78,9 @@
                     var series2 = this.series[2];
                     var series3 = this.series[3];
                     var series4 = this.series[4];
+                    var series5 = this.series[5];
                     setInterval(function () {
-                        ajaxGet(series0, series1, series2, series3, series4);
+                        ajaxGet(series0, series1, series2, series3, series4, series5);
                     }, 3000);
                 }
             }

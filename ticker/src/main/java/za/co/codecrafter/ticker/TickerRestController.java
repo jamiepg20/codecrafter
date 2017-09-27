@@ -46,6 +46,10 @@ public class TickerRestController {
         Ticker coinbase = tickerDao.findFirstBySourceOrderByIdDesc(Source.Coinbase);
         coinbase.setTimestamp(now);
         tickers.add(coinbase);
+        // -------------
+        Ticker iceCubed = tickerDao.findFirstBySourceOrderByIdDesc(Source.IceCubed);
+        iceCubed.setTimestamp(now);
+        tickers.add(iceCubed);
         return tickers;
     }
 }
