@@ -41,6 +41,7 @@ public class HttpClient {
                 return response.getBody();
             }catch (HttpClientErrorException e){
                 FourTwentyNineRegulator.record429(request, e);
+                return null;
             }
         }
         throw new InternalPushBackException("Internal Threshold exceeded");

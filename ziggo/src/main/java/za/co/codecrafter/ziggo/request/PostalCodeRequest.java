@@ -11,7 +11,7 @@ import java.net.URI;
  */
 public class PostalCodeRequest extends RequestEntity {
 
-    public PostalCodeRequest(String zipcode, String housenumber) {
+    public PostalCodeRequest(String zipcode, Long housenumber) {
         super(HttpMethod.GET,
                 URI.create(String.format("https://restapi.ziggo.nl/1.0/nearnet/?zipcode=%s&housenumber=%s",
                         zipcode,

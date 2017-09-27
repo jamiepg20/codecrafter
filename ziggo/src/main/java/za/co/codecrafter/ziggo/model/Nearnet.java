@@ -3,10 +3,7 @@ package za.co.codecrafter.ziggo.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.PostPersist;
+import javax.persistence.*;
 import java.util.Date;
 
 
@@ -22,14 +19,21 @@ public class Nearnet {
     @GeneratedValue
     private Long id;
     private Date createdDate;
+    private Date modifiedDate;
+    // ----------
     private String zipcode;
     private Long housenumber;
     private String city;
     private Long zipcodechecker;
     private Long order;
 
-    @PostPersist
-    private void onCreate() {
+    @PrePersist
+    protected void onCreate() {
         createdDate = new Date();
+    }
+
+    @PreUpdate
+    protected void onModify() {
+        modifiedDate = new Date();
     }
 }

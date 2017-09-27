@@ -18,7 +18,6 @@ import za.co.codecrafter.ziggo.response.PostalCodeResponse;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Objects;
-import java.util.Optional;
 
 
 /**
@@ -41,28 +40,27 @@ public class ZiggoApplication {
         SpringApplication.run(ZiggoApplication.class, args);
     }
 
-    @Scheduled(fixedRate = 10000L)
+    @Scheduled(fixedRate = 1000L)
     public void crawl() {
-        Iterator<PostalAddress> iterator = postalAddressDao.findAll().iterator();
+        Iterator<PostalAddress> iterator = postalAddressDao.findAllByNearnetFalseOrNearnetNull().iterator();
         ArrayList<PostalAddress> result = new ArrayList<>();
         iterator.forEachRemaining(result::add);
-
         result.stream()//
                 .map(p -> convert(p.getZipcode(), p.getHousenumber())) //
                 .filter(Objects::nonNull) //
-                .forEach(nearnet -> {
-                    Optional<Nearnet>
-                            existing =
-                            nearnetDao.findAllByZipcodeAndHousenumber(nearnet.getZipcode(), nearnet.getHousenumber());
-                    if (existing.isPresent()) {
-                        log.info("already exists");
-                    } else {
-                        nearnetDao.save(nearnet);
+                .forEach(n -> {
+                    if (!nearnetDao.findAllByZipcodeAndHousenumber(n.getZipcode(), n.getHousenumber()).isPresent()) {
+                        nearnetDao.save(n);
                     }
+                    PostalAddress
+                            p =
+                            postalAddressDao.findAllByZipcodeAndHousenumber(n.getZipcode(), n.getHousenumber());
+                    p.setNearnet(true);
+                    postalAddressDao.save(p);
                 });
     }
 
-    private Nearnet convert(String zipcode, String housenumber) {
+    private Nearnet convert(String zipcode, Long housenumber) {
         PostalCodeRequest request = new PostalCodeRequest(zipcode, housenumber);
         try {
             return httpClient.execute(request, PostalCodeResponse.class).getNearnet();
